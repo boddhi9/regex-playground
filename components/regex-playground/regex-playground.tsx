@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useRegexState } from './use-regex-state'
@@ -12,12 +12,24 @@ import { RegexHistory } from './components/regex-history'
 import { RegexExplainer } from './components/regex-explainer'
 import { RegexChallenges } from './components/regex-challenges'
 import { Button } from '@/components/ui/button'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function RegexPlayground() {
   const { state, dispatch } = useRegexState()
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMenuOpen(true)
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize() // Call once to ensure correct initial state
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const handleRegexChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,6 +130,10 @@ export default function RegexPlayground() {
     document.documentElement.classList.toggle('dark')
   }
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen)
+  }
+
   return (
     <AnimatePresence>
       <motion.div
@@ -127,78 +143,95 @@ export default function RegexPlayground() {
         transition={{ duration: 0.5 }}
         className={`w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto ${isDarkMode ? 'dark' : ''}`}
       >
-        <Card className="w-full">
-          <CardHeader className="flex flex-row items-center justify-between p-2 md:p-4">
-            <CardTitle>Regex Playground</CardTitle>
-            <Button variant="outline" size="icon" onClick={toggleDarkMode}>
-              {isDarkMode ? (
-                <Sun className="size-5" />
-              ) : (
-                <Moon className="size-5" />
-              )}
-            </Button>
+        <Card className="w-full shadow-lg rounded-lg overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between p-3 md:p-5 bg-gradient-to-r from-yellow-300 via-pink-400 to-blue-600 dark:from-purple-800 dark:via-black dark:to-indigo-900 text-white rounded-t-lg">
+            <CardTitle className="text-xl font-semibold">Regex Playground</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="icon" onClick={toggleDarkMode}>
+                {isDarkMode ? (
+                  <Sun className="size-5" />
+                ) : (
+                  <Moon className="size-5" />
+                )}
+              </Button>
+              <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
+                {menuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+              </Button>
+            </div>
           </CardHeader>
-          <CardContent className="p-2 md:p-4">
-            <Tabs defaultValue="editor" className="space-y-4">
-              <TabsList className="flex flex-wrap gap-2 md:grid md:grid-cols-5 overflow-x-auto whitespace-nowrap">
-                <TabsTrigger value="editor">Editor</TabsTrigger>
-                <TabsTrigger value="library">Library</TabsTrigger>
-                <TabsTrigger value="history">History</TabsTrigger>
-                <TabsTrigger value="explainer">Explainer</TabsTrigger>
-                <TabsTrigger value="challenges">Challenges</TabsTrigger>
-              </TabsList>
-              <TabsContent value="editor" className="space-y-4">
-                <RegexInput
-                  regex={state.regex}
-                  flags={state.flags}
-                  isValid={state.isValid}
-                  error={state.error}
-                  onRegexChange={handleRegexChange}
-                  onFlagsChange={handleFlagsChange}
-                  onCopyRegex={handleCopyRegex}
-                />
-                <TestStringInput
-                  text={state.text}
-                  onTextChange={handleTextChange}
-                  onGenerateRandomString={handleGenerateRandomString}
-                />
-                <MatchesDisplay
-                  text={state.text}
-                  matches={state.matches}
-                  executionTime={state.executionTime}
-                />
-              </TabsContent>
-              <TabsContent value="library">
-                <PatternLibrary
-                  savedPatterns={state.savedPatterns}
-                  selectedPattern={state.selectedPattern}
-                  patternName={state.patternName}
-                  onLoadPattern={handleLoadPattern}
-                  onDeletePattern={handleDeletePattern}
-                  onPatternNameChange={(e) =>
-                    dispatch({
-                      type: 'SET_PATTERN_NAME',
-                      payload: e.target.value,
-                    })
-                  }
-                  onSavePattern={handleSavePattern}
-                />
-              </TabsContent>
-              <TabsContent value="history">
-                <RegexHistory
-                  history={state.regexHistory}
-                  onSelectRegex={(regex) =>
-                    dispatch({ type: 'SET_REGEX', payload: regex })
-                  }
-                />
-              </TabsContent>
-              <TabsContent value="explainer">
-                <RegexExplainer regex={state.regex} />
-              </TabsContent>
-              <TabsContent value="challenges">
-                <RegexChallenges />
-              </TabsContent>
-            </Tabs>
+          <CardContent className="p-3 md:p-5 bg-white dark:bg-gray-900">
+            <div className={`${menuOpen ? 'block' : 'hidden'} md:block`}>
+              <Tabs defaultValue="editor" className="space-y-4">
+                <TabsList className="flex flex-wrap gap-2 md:grid md:grid-cols-5 overflow-x-auto whitespace-nowrap">
+                  <TabsTrigger value="editor" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                    Editor
+                  </TabsTrigger>
+                  <TabsTrigger value="library" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                    Library
+                  </TabsTrigger>
+                  <TabsTrigger value="history" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                    History
+                  </TabsTrigger>
+                  <TabsTrigger value="explainer" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                    Explainer
+                  </TabsTrigger>
+                  <TabsTrigger value="challenges" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                    Challenges
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="editor" className="space-y-4">
+                  <RegexInput
+                    regex={state.regex}
+                    flags={state.flags}
+                    isValid={state.isValid}
+                    error={state.error}
+                    onRegexChange={handleRegexChange}
+                    onFlagsChange={handleFlagsChange}
+                    onCopyRegex={handleCopyRegex}
+                  />
+                  <TestStringInput
+                    text={state.text}
+                    onTextChange={handleTextChange}
+                    onGenerateRandomString={handleGenerateRandomString}
+                  />
+                  <MatchesDisplay
+                    text={state.text}
+                    matches={state.matches}
+                    executionTime={state.executionTime}
+                  />
+                </TabsContent>
+                <TabsContent value="library">
+                  <PatternLibrary
+                    savedPatterns={state.savedPatterns}
+                    selectedPattern={state.selectedPattern}
+                    patternName={state.patternName}
+                    onLoadPattern={handleLoadPattern}
+                    onDeletePattern={handleDeletePattern}
+                    onPatternNameChange={(e) =>
+                      dispatch({
+                        type: 'SET_PATTERN_NAME',
+                        payload: e.target.value,
+                      })
+                    }
+                    onSavePattern={handleSavePattern}
+                  />
+                </TabsContent>
+                <TabsContent value="history">
+                  <RegexHistory
+                    history={state.regexHistory}
+                    onSelectRegex={(regex) =>
+                      dispatch({ type: 'SET_REGEX', payload: regex })
+                    }
+                  />
+                </TabsContent>
+                <TabsContent value="explainer">
+                  <RegexExplainer regex={state.regex} />
+                </TabsContent>
+                <TabsContent value="challenges">
+                  <RegexChallenges />
+                </TabsContent>
+              </Tabs>
+            </div>
           </CardContent>
         </Card>
       </motion.div>
