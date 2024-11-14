@@ -1,9 +1,14 @@
 import React from 'react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { Copy } from 'lucide-react'
 
 interface RegexInputProps {
@@ -11,8 +16,8 @@ interface RegexInputProps {
   flags: string
   isValid: boolean
   error: string | null
-  onRegexChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onFlagsChange: (checked: boolean, flag: string) => void
+  onRegexChange: (_e: React.ChangeEvent<HTMLInputElement>) => void
+  onFlagsChange: (_checked: boolean, _flag: string) => void
   onCopyRegex: () => void
 }
 
@@ -23,7 +28,7 @@ export function RegexInput({
   error,
   onRegexChange,
   onFlagsChange,
-  onCopyRegex
+  onCopyRegex,
 }: RegexInputProps) {
   return (
     <div className="space-y-4">
@@ -34,14 +39,14 @@ export function RegexInput({
             id="regex"
             value={regex}
             onChange={onRegexChange}
-            className={`mt-1 flex-grow ${isValid ? '' : 'border-red-500'}`}
+            className={`mt-1 grow ${isValid ? '' : 'border-red-500'}`}
             placeholder="Enter your regex here"
           />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" onClick={onCopyRegex}>
-                  <Copy className="h-4 w-4" />
+                  <Copy className="size-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

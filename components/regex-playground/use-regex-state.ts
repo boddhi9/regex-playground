@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { Match, SavedPattern, State } from '@/lib/types';
+import { Match, SavedPattern, State } from '@/lib/types'
 import { useReducer, useCallback, useEffect } from 'react'
 
 type Action =
@@ -55,7 +55,10 @@ function reducer(state: State, action: Action): State {
     case 'ADD_TO_HISTORY':
       return {
         ...state,
-        regexHistory: [action.payload, ...state.regexHistory.filter(r => r !== action.payload)].slice(0, 10)
+        regexHistory: [
+          action.payload,
+          ...state.regexHistory.filter((r) => r !== action.payload),
+        ].slice(0, 10),
       }
     default:
       return state
@@ -68,7 +71,10 @@ export function useRegexState() {
   useEffect(() => {
     const savedPatterns = localStorage.getItem('savedPatterns')
     if (savedPatterns) {
-      dispatch({ type: 'SET_SAVED_PATTERNS', payload: JSON.parse(savedPatterns) })
+      dispatch({
+        type: 'SET_SAVED_PATTERNS',
+        payload: JSON.parse(savedPatterns),
+      })
     }
     const regexHistory = localStorage.getItem('regexHistory')
     if (regexHistory) {

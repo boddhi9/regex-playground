@@ -1,4 +1,4 @@
-import RegexPlayground from "@/components/regex-playground"
+import RegexPlayground from '@/components/regex-playground'
 
 export default function Home() {
   return (
