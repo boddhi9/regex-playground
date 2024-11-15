@@ -22,7 +22,7 @@ const challenges = [
   },
 ]
 
-export function RegexChallenges() {
+export const RegexChallenges = () => {
   const [currentChallenge, setCurrentChallenge] = useState(0)
   const [userRegex, setUserRegex] = useState('')
   const [result, setResult] = useState('')

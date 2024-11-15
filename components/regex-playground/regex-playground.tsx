@@ -145,7 +145,9 @@ export default function RegexPlayground() {
       >
         <Card className="w-full shadow-lg rounded-lg overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between p-3 md:p-5 bg-gradient-to-r from-yellow-300 via-pink-400 to-blue-600 dark:from-purple-800 dark:via-black dark:to-indigo-900 text-white rounded-t-lg">
-            <CardTitle className="text-xl font-semibold">Regex Playground</CardTitle>
+            <CardTitle className="text-xl font-semibold">
+              Regex Playground
+            </CardTitle>
             <div className="flex items-center space-x-2">
               <Button variant="ghost" size="icon" onClick={toggleDarkMode}>
                 {isDarkMode ? (
@@ -154,8 +156,17 @@ export default function RegexPlayground() {
                   <Moon className="size-5" />
                 )}
               </Button>
-              <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
-                {menuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={toggleMenu}
+              >
+                {menuOpen ? (
+                  <X className="size-6" />
+                ) : (
+                  <Menu className="size-6" />
+                )}
               </Button>
             </div>
           </CardHeader>
@@ -163,19 +174,34 @@ export default function RegexPlayground() {
             <div className={`${menuOpen ? 'block' : 'hidden'} md:block`}>
               <Tabs defaultValue="editor" className="space-y-4">
                 <TabsList className="flex flex-wrap gap-2 md:grid md:grid-cols-5 overflow-x-auto whitespace-nowrap">
-                  <TabsTrigger value="editor" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                  <TabsTrigger
+                    value="editor"
+                    className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md"
+                  >
                     Editor
                   </TabsTrigger>
-                  <TabsTrigger value="library" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                  <TabsTrigger
+                    value="library"
+                    className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md"
+                  >
                     Library
                   </TabsTrigger>
-                  <TabsTrigger value="history" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                  <TabsTrigger
+                    value="history"
+                    className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md"
+                  >
                     History
                   </TabsTrigger>
-                  <TabsTrigger value="explainer" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                  <TabsTrigger
+                    value="explainer"
+                    className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md"
+                  >
                     Explainer
                   </TabsTrigger>
-                  <TabsTrigger value="challenges" className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md">
+                  <TabsTrigger
+                    value="challenges"
+                    className="hover:bg-teal-200 dark:hover:bg-teal-700 transition rounded-md"
+                  >
                     Challenges
                   </TabsTrigger>
                 </TabsList>

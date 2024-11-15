@@ -6,15 +6,18 @@ type RegexExplainerProps = {
   regex: string
 }
 
-export function RegexExplainer({ regex }: RegexExplainerProps) {
-  const explainRegex = (regex: string) => {
+export const RegexExplainer = ({ regex }: RegexExplainerProps) => {
+  const explainRegex = (regex: string): string[] => {
     const explanations: string[] = []
 
-    if (regex.startsWith('^'))
+    if (regex.startsWith('^')) {
       explanations.push('Matches the start of the line')
-    if (regex.endsWith('$')) explanations.push('Matches the end of the line')
+    }
+    if (regex.endsWith('$')) {
+      explanations.push('Matches the end of the line')
+    }
 
-    regex.replace(/\\.|\[.*?\]|$$\?:.*?$$|$$.*?$$|\w+|./g, (match) => {
+    regex.replace(/\\.|\[.*?\]|\(\?:.*?\)|\(.*?\)|\w+|./g, (match) => {
       switch (match) {
         case '.':
           explanations.push('Matches any character except newline')
@@ -35,7 +38,7 @@ export function RegexExplainer({ regex }: RegexExplainerProps) {
             )
           } else if (match.startsWith('(') && match.endsWith(')')) {
             explanations.push(`Grouping: ${match}`)
-          } else if (match.length > 1 && match.startsWith('\\')) {
+          } else if (match.startsWith('\\')) {
             explanations.push(`Special character: ${match}`)
           }
       }
@@ -51,11 +54,17 @@ export function RegexExplainer({ regex }: RegexExplainerProps) {
     <Card>
       <CardContent className="pt-6">
         <h3 className="text-lg font-semibold mb-4">Regex Explanation</h3>
-        <ul className="list-disc pl-5 space-y-2">
-          {explanations.map((explanation) => (
-            <li key={uuidv4()}>{explanation}</li>
-          ))}
-        </ul>
+        {explanations.length > 0 ? (
+          <ul className="list-disc pl-5 space-y-2">
+            {explanations.map((explanation) => (
+              <li key={uuidv4()}>{explanation}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500">
+            No explanation available for the given regex.
+          </p>
+        )}
       </CardContent>
     </Card>
   )

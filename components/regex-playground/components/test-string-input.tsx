@@ -3,17 +3,17 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
-interface TestStringInputProps {
+type TestStringInputProps = {
   text: string
   onTextChange: (_e: React.ChangeEvent<HTMLTextAreaElement>) => void
   onGenerateRandomString: () => void
 }
 
-export function TestStringInput({
+export const TestStringInput = ({
   text,
   onTextChange,
   onGenerateRandomString,
-}: TestStringInputProps) {
+}: TestStringInputProps) => {
   return (
     <div className="space-y-2">
       <Label htmlFor="text">Test String</Label>

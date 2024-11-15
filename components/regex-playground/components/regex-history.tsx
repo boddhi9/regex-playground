@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
-interface RegexHistoryProps {
+type RegexHistoryProps = {
   history: string[]
   onSelectRegex: (regex: string) => void
 }
 
-export function RegexHistory({ history, onSelectRegex }: RegexHistoryProps) {
+export const RegexHistory = ({ history, onSelectRegex }: RegexHistoryProps) => {
   return (
     <ScrollArea className="h-[300px]">
       <div className="space-y-2 pr-4">

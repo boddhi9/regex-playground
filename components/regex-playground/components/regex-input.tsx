@@ -11,17 +11,17 @@ import {
 } from '@/components/ui/tooltip'
 import { Copy } from 'lucide-react'
 
-interface RegexInputProps {
+type RegexInputProps = {
   regex: string
   flags: string
   isValid: boolean
   error: string | null
-  onRegexChange: (_e: React.ChangeEvent<HTMLInputElement>) => void
-  onFlagsChange: (_checked: boolean, _flag: string) => void
+  onRegexChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onFlagsChange: (checked: boolean, flag: string) => void
   onCopyRegex: () => void
 }
 
-export function RegexInput({
+export const RegexInput = ({
   regex,
   flags,
   isValid,
@@ -29,7 +29,7 @@ export function RegexInput({
   onRegexChange,
   onFlagsChange,
   onCopyRegex,
-}: RegexInputProps) {
+}: RegexInputProps) => {
   return (
     <div className="space-y-4">
       <div>

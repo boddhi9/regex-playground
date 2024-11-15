@@ -10,28 +10,31 @@ type MatchesDisplayProps = {
   executionTime: number | null
 }
 
-export function MatchesDisplay({
+export const MatchesDisplay = ({
   text,
   matches,
   executionTime,
-}: MatchesDisplayProps) {
-  return (
-    <div className="space-y-4">
-      <div>
-        <Label>Matches</Label>
-        <Card className="mt-1 p-2 min-h-[100px] max-h-[200px] overflow-auto">
-          {highlightMatches(text, matches)}
-        </Card>
-      </div>
-      <div className="flex justify-between items-center">
-        <p>Number of matches: {matches.length}</p>
-        {executionTime && <p>Execution time: {executionTime.toFixed(2)} ms</p>}
-      </div>
+}: MatchesDisplayProps) => (
+  <div className="space-y-4">
+    <div>
+      <Label>Matches</Label>
+      <Card className="mt-1 p-2 min-h-[100px] max-h-[200px] overflow-auto">
+        {highlightMatches(text, matches)}
+      </Card>
     </div>
-  )
-}
+    <div className="flex justify-between items-center">
+      <p>Number of matches: {matches.length}</p>
+      {executionTime && <p>Execution time: {executionTime.toFixed(2)} ms</p>}
+    </div>
+  </div>
+)
 
-function highlightMatches(text: string, matches: Match[]): React.ReactNode {
+export const highlightMatches = (
+  text: string,
+  matches: Match[]
+): React.ReactNode => {
+  if (!matches.length) return text
+
   let lastIndex = 0
   const elements: React.ReactNode[] = []
 

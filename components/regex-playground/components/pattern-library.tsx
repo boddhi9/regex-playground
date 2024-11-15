@@ -48,7 +48,7 @@ export const commonPatterns: {
   },
 }
 
-export function PatternLibrary({
+export const PatternLibrary = ({
   savedPatterns,
   selectedPattern,
   patternName,
@@ -56,7 +56,7 @@ export function PatternLibrary({
   onDeletePattern,
   onPatternNameChange,
   onSavePattern,
-}: PatternLibraryProps) {
+}: PatternLibraryProps) => {
   return (
     <div className="space-y-4">
       <div>

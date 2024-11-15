@@ -65,7 +65,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export function useRegexState() {
+export const useRegexState = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
@@ -98,8 +98,19 @@ export function useRegexState() {
       return
     }
 
+    let regExp
     try {
-      const regExp = new RegExp(state.regex, state.flags)
+      regExp = new RegExp(state.regex, state.flags)
+    } catch (err) {
+      console.warn('Invalid regex caught:', err)
+      dispatch({ type: 'SET_IS_VALID', payload: false })
+      dispatch({ type: 'SET_ERROR', payload: (err as Error).message })
+      dispatch({ type: 'SET_MATCHES', payload: [] })
+      dispatch({ type: 'SET_EXECUTION_TIME', payload: null })
+      return
+    }
+
+    try {
       const startTime = performance.now()
       const newMatches = getMatches(regExp, state.text)
       const endTime = performance.now()
