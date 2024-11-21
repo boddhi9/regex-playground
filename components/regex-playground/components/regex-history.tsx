@@ -4,6 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import useUUIDs from '@/hooks/use-uuid'
 import { Card, CardContent } from '@/components/ui/card'
 import { Trash } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
 
 type RegexHistoryProps = {
   history: string[]
@@ -19,6 +20,14 @@ export const RegexHistory = ({
   onDeleteRegex,
 }: RegexHistoryProps) => {
   const memoizedUUIDs = useUUIDs(history)
+
+  const handleSelectRegex = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const regexValue = event.currentTarget.textContent || ''
+    onSelectRegex(regexValue)
+    toast({
+      title: 'Regex has been loaded.',
+    })
+  }
 
   if (!history.length)
     return (
@@ -44,7 +53,7 @@ export const RegexHistory = ({
               <Button
                 variant="outline"
                 className="flex-1 justify-start truncate"
-                onClick={() => onSelectRegex(regex)}
+                onClick={handleSelectRegex} // Now correctly typed for button clicks
               >
                 {regex}
               </Button>

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Trash } from 'lucide-react'
 import { SavedPattern } from '@/lib/types'
+import { toast } from '@/hooks/use-toast'
 
 type PatternLibraryProps = {
   savedPatterns: SavedPattern[]
@@ -57,6 +58,12 @@ export const PatternLibrary = ({
   onPatternNameChange,
   onSavePattern,
 }: PatternLibraryProps) => {
+  const handleLoadPattern = (pattern: string) => {
+    onLoadPattern(pattern)
+    toast({
+      title: `${pattern} pattern has been loaded.`,
+    })
+  }
   return (
     <div className="space-y-4">
       <div>
@@ -92,7 +99,7 @@ export const PatternLibrary = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onLoadPattern(pattern.name)}
+                onClick={() => handleLoadPattern(pattern.name)}
               >
                 Load
               </Button>
