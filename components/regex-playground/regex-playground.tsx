@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useRegexState } from './use-regex-state'
@@ -14,6 +14,7 @@ import { RegexChallenges } from './components/regex-challenges'
 import { Button } from '@/components/ui/button'
 import { Moon, Sun, Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import useDebounce from '@/hooks/use-debounce'
 
 export default function RegexPlayground() {
   const { state, dispatch } = useRegexState()
@@ -27,17 +28,28 @@ export default function RegexPlayground() {
       }
     }
     window.addEventListener('resize', handleResize)
-    handleResize() // Call once to ensure correct initial state
+    handleResize()
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  const [debouncedRegex, setDebouncedRegex] = useDebounce(state.regex, {
+    delay: 1000,
+  })
+
   const handleRegexChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch({ type: 'SET_REGEX', payload: e.target.value })
-      dispatch({ type: 'ADD_TO_HISTORY', payload: e.target.value })
+      const newValue = e.target.value
+      dispatch({ type: 'SET_REGEX', payload: newValue })
+      setDebouncedRegex(newValue)
     },
-    [dispatch]
+    [dispatch, setDebouncedRegex]
   )
+
+  useEffect(() => {
+    if (debouncedRegex) {
+      dispatch({ type: 'ADD_TO_HISTORY', payload: debouncedRegex })
+    }
+  }, [debouncedRegex, dispatch])
 
   const handleFlagsChange = useCallback(
     (checked: boolean, flag: string) => {

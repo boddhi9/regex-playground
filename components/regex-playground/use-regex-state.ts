@@ -53,12 +53,18 @@ function reducer(state: State, action: Action): State {
     case 'SET_EXECUTION_TIME':
       return { ...state, executionTime: action.payload }
     case 'ADD_TO_HISTORY':
+      const historyEntry = Array.isArray(action.payload)
+        ? action.payload.flat()
+        : action.payload
+
       return {
         ...state,
         regexHistory: [
-          action.payload,
-          ...state.regexHistory.filter((r) => r !== action.payload),
-        ].slice(0, 10),
+          ...(Array.isArray(historyEntry) ? historyEntry : [historyEntry]),
+          ...state.regexHistory,
+        ]
+          .filter((r, index, self) => self.indexOf(r) === index)
+          .slice(0, 10),
       }
     default:
       return state

@@ -10,8 +10,8 @@ describe('highlightMatches', () => {
       { index: 4, value: 'quick' },
       { index: 16, value: 'fox' },
     ]
-
-    const highlighted = highlightMatches(text, matches)
+  
+    const highlighted = highlightMatches(text, matches, [])
     const { container } = render(<div>{highlighted}</div>)
 
     expect(container).toHaveTextContent(
@@ -30,7 +30,7 @@ describe('highlightMatches', () => {
     const text = 'Hello world!'
     const matches: Match[] = [{ index: 6, value: 'world' }]
 
-    const highlighted = highlightMatches(text, matches)
+    const highlighted = highlightMatches(text, matches, [])
     const { container } = render(<div>{highlighted}</div>)
 
     expect(container).toHaveTextContent('Hello world!')
@@ -43,7 +43,7 @@ describe('highlightMatches', () => {
     const text = 'No matches here.'
     const matches: Match[] = []
 
-    const highlighted = highlightMatches(text, matches)
+    const highlighted = highlightMatches(text, matches, [])
     const { container } = render(<div>{highlighted}</div>)
 
     expect(container).toHaveTextContent(text)
@@ -54,7 +54,7 @@ describe('highlightMatches', () => {
     const text = 'Pattern at the end match'
     const matches: Match[] = [{ index: 17, value: 'match' }]
 
-    const highlighted = highlightMatches(text, matches)
+    const highlighted = highlightMatches(text, matches, [])
     const { container } = render(<div>{highlighted}</div>)
 
     const marks = container.querySelectorAll('mark')
@@ -69,7 +69,7 @@ describe('highlightMatches', () => {
       { index: 3, value: 'abc' },
     ]
 
-    const highlighted = highlightMatches(text, matches)
+    const highlighted = highlightMatches(text, matches, [])
     const { container } = render(<div>{highlighted}</div>)
 
     const marks = container.querySelectorAll('mark')

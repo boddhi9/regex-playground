@@ -1,6 +1,6 @@
 import React from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import { Card, CardContent } from '@/components/ui/card'
+import useUUIDs from '@/hooks/use-uuid'
 
 type RegexExplainerProps = {
   regex: string
@@ -49,6 +49,7 @@ export const RegexExplainer = ({ regex }: RegexExplainerProps) => {
   }
 
   const explanations = explainRegex(regex)
+  const memoizedUUIDs = useUUIDs(explanations)
 
   return (
     <Card>
@@ -56,8 +57,8 @@ export const RegexExplainer = ({ regex }: RegexExplainerProps) => {
         <h3 className="text-lg font-semibold mb-4">Regex Explanation</h3>
         {explanations.length > 0 ? (
           <ul className="list-disc pl-5 space-y-2">
-            {explanations.map((explanation) => (
-              <li key={uuidv4()}>{explanation}</li>
+            {explanations.map((explanation, index) => (
+              <li key={memoizedUUIDs[index]}>{explanation}</li>
             ))}
           </ul>
         ) : (
