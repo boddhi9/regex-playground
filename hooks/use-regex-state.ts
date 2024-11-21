@@ -15,6 +15,8 @@ type Action =
   | { type: 'SET_PATTERN_NAME'; payload: string }
   | { type: 'SET_EXECUTION_TIME'; payload: number | null }
   | { type: 'ADD_TO_HISTORY'; payload: string }
+  | { type: 'CLEAR_HISTORY' }
+  | { type: 'DELETE_FROM_HISTORY'; payload: string }
 
 const initialState: State = {
   regex: '',
@@ -30,7 +32,7 @@ const initialState: State = {
   regexHistory: [],
 }
 
-function reducer(state: State, action: Action): State {
+const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'SET_REGEX':
       return { ...state, regex: action.payload, error: null }
@@ -52,19 +54,27 @@ function reducer(state: State, action: Action): State {
       return { ...state, patternName: action.payload }
     case 'SET_EXECUTION_TIME':
       return { ...state, executionTime: action.payload }
-    case 'ADD_TO_HISTORY':
-      const historyEntry = Array.isArray(action.payload)
+    case 'ADD_TO_HISTORY': {
+      const newHistory = Array.isArray(action.payload)
         ? action.payload.flat()
-        : action.payload
+        : [action.payload]
 
       return {
         ...state,
         regexHistory: [
-          ...(Array.isArray(historyEntry) ? historyEntry : [historyEntry]),
-          ...state.regexHistory,
-        ]
-          .filter((r, index, self) => self.indexOf(r) === index)
-          .slice(0, 10),
+          ...newHistory,
+          ...state.regexHistory.filter((r) => !newHistory.includes(r)),
+        ].slice(0, 10),
+      }
+    }
+    case 'CLEAR_HISTORY':
+      return { ...state, regexHistory: [] }
+    case 'DELETE_FROM_HISTORY':
+      return {
+        ...state,
+        regexHistory: state.regexHistory.filter(
+          (regex) => regex !== action.payload
+        ),
       }
     default:
       return state

@@ -3,14 +3,23 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import useUUIDs from '@/hooks/use-uuid'
 import { Card, CardContent } from '@/components/ui/card'
+import { Trash } from 'lucide-react'
 
 type RegexHistoryProps = {
   history: string[]
   onSelectRegex: (regex: string) => void
+  onClearHistory: () => void
+  onDeleteRegex: (regex: string) => void
 }
 
-export const RegexHistory = ({ history, onSelectRegex }: RegexHistoryProps) => {
+export const RegexHistory = ({
+  history,
+  onSelectRegex,
+  onClearHistory,
+  onDeleteRegex,
+}: RegexHistoryProps) => {
   const memoizedUUIDs = useUUIDs(history)
+
   if (!history.length)
     return (
       <Card>
@@ -22,20 +31,40 @@ export const RegexHistory = ({ history, onSelectRegex }: RegexHistoryProps) => {
         </CardContent>
       </Card>
     )
+
   return (
-    <ScrollArea className="h-[300px]">
-      <div className="space-y-2 pr-4">
-        {history.map((regex, index) => (
-          <Button
-            key={memoizedUUIDs[index]}
-            variant="outline"
-            className="w-full justify-start"
-            onClick={() => onSelectRegex(regex)}
-          >
-            {regex}
-          </Button>
-        ))}
+    <div className="relative">
+      <ScrollArea className="h-[300px]">
+        <div className="space-y-2 pr-4">
+          {history.map((regex, index) => (
+            <div
+              key={memoizedUUIDs[index]}
+              className="flex items-center justify-between p-2 bg-secondary rounded-md"
+            >
+              <Button
+                variant="outline"
+                className="flex-1 justify-start truncate"
+                onClick={() => onSelectRegex(regex)}
+              >
+                {regex}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="ml-2"
+                onClick={() => onDeleteRegex(regex)}
+              >
+                <Trash className="size-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+      <div className="absolute bottom-0 right-0 p-4">
+        <Button onClick={onClearHistory} variant="destructive">
+          Clear All
+        </Button>
       </div>
-    </ScrollArea>
+    </div>
   )
 }

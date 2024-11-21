@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useRegexState } from './use-regex-state'
 import { RegexInput } from './components/regex-input'
 import { TestStringInput } from './components/test-string-input'
 import { MatchesDisplay } from './components/matches-display'
@@ -15,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Moon, Sun, Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import useDebounce from '@/hooks/use-debounce'
+import { useRegexState } from '@/hooks/use-regex-state'
 
 export default function RegexPlayground() {
   const { state, dispatch } = useRegexState()
@@ -259,6 +259,13 @@ export default function RegexPlayground() {
                     history={state.regexHistory}
                     onSelectRegex={(regex) =>
                       dispatch({ type: 'SET_REGEX', payload: regex })
+                    }
+                    onClearHistory={() => dispatch({ type: 'CLEAR_HISTORY' })}
+                    onDeleteRegex={(regex) =>
+                      dispatch({
+                        type: 'DELETE_FROM_HISTORY',
+                        payload: regex,
+                      })
                     }
                   />
                 </TabsContent>
